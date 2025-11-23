@@ -8,23 +8,52 @@ The application follows a modular architecture separating the frontend UI from t
 
 ```mermaid
 graph TD
-    User([User]) <-->|Voice/Text| UI["Streamlit UI (Manager.py)"]
+    %% Nodes
+    User([User])
     
-    subgraph Frontend
-        UI -->|State Management| State[(Session State)]
-        UI -->|Speech Input| STT[SpeechRecognition]
-        UI -->|Speech Output| TTS[pyttsx3]
+    subgraph Frontend ["Streamlit UI (Manager.py)"]
+        UI_Input[Microphone Input]
+        UI_Output[Speaker Output]
+        STT[Speech To Text]
+        TTS[Text To Speech]
+        State[(Session State)]
     end
     
-    subgraph Backend
-        UI <-->|API Calls| Agent["InterviewManager (agent.py)"]
-        Agent -->|History & Context| Context[("Context Manager")]
-        Agent <-->|Generate Content| Gemini[Google Gemini API]
+    subgraph Backend ["Backend Logic"]
+        subgraph AgentLayer ["InterviewManager (agent.py)"]
+            ProtocolEngine{{"Agentic Protocol Engine
+            (Mirror, Socratic, Thread Follower)"}}
+            ContextMgr[Context Manager]
+        end
+        
+        Gemini[Google Gemini API]
     end
     
+    Report[Feedback JSON Report]
+    FinalUI[Assessment Page]
+
+    %% Flows
+    User -->|Voice Input| UI_Input
+    UI_Input -->|Audio Data| STT
+    STT -->|Transcribed Text| ProtocolEngine
+    
+    ProtocolEngine <-->|History & Context| ContextMgr
+    ProtocolEngine <-->|Prompt & Response| Gemini
+    
+    ProtocolEngine -->|AI Response Text| TTS
+    TTS -->|Audio Output| UI_Output
+    UI_Output -->|Heard by| User
+    
+    %% Feedback Flow
+    ProtocolEngine -- "End of Session" --> Report
+    Report -->|Rendered as| FinalUI
+    FinalUI -->|Viewed by| User
+
+    %% Styling
     style User fill:#f9f,stroke:#333,stroke-width:2px
     style Gemini fill:#4285F4,stroke:#333,stroke-width:2px,color:white
-    style UI fill:#FF4B4B,stroke:#333,stroke-width:2px,color:white
+    style ProtocolEngine fill:#FF4B4B,stroke:#333,stroke-width:2px,color:white
+    style Report fill:#F7E98E,stroke:#333,stroke-width:1px
 ```
 
 ### Components
@@ -70,6 +99,17 @@ To ensure a realistic and effective interview simulation, the AI interviewer is 
 
 ### Termination Protocol
 When the interview time limit is reached, the AI immediately stops questioning and concludes the session with a standard closing statement, ensuring a hard stop similar to a real scheduled interview.
+
+## 🧪 Testing & Scenarios
+
+The system is designed to handle various user personas through its agentic protocols. Here is how it adapts to different scenarios:
+
+| User Persona | Behavior | Active Protocol | System Response |
+| :--- | :--- | :--- | :--- |
+| **The Confused User** | Unsure of what to say, gives short or vague answers. | **The Socratic Guide** | The AI will not provide the answer but will offer a rephrased question or a hypothetical scenario to jog the user's memory. |
+| **The Efficient User** | Gives precise, to-the-point answers. | **The Mirror Effect** | The AI matches the brevity, skipping unnecessary pleasantries and moving immediately to the next technical question. |
+| **The Chatty User** | Frequently goes off-topic or rambles. | **The Course Corrector** | The AI politely interrupts (via text logic) by summarizing the valid part of the answer and steering the conversation back to the core topic. |
+| **The Edge Case User** | Tries to discuss non-interview topics or provides invalid inputs. | **The Professional Guardrail** | The AI refuses to engage in off-topic discussions (e.g., "I cannot discuss sports") while maintaining a professional interviewer persona. |
 
 ## 🚀 Setup Instructions
 
