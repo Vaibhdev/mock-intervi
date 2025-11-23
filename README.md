@@ -8,7 +8,7 @@ The application follows a modular architecture separating the frontend UI from t
 
 ```mermaid
 graph TD
-    User([User]) <-->|Voice/Text| UI[Streamlit UI (Manager.py)]
+    User([User]) <-->|Voice/Text| UI["Streamlit UI (Manager.py)"]
     
     subgraph Frontend
         UI -->|State Management| State[(Session State)]
@@ -17,8 +17,8 @@ graph TD
     end
     
     subgraph Backend
-        UI <-->|API Calls| Agent[InterviewManager (agent.py)]
-        Agent -->|History & Context| Context[(Context Manager)]
+        UI <-->|API Calls| Agent["InterviewManager (agent.py)"]
+        Agent -->|History & Context| Context[("Context Manager")]
         Agent <-->|Generate Content| Gemini[Google Gemini API]
     end
     
