@@ -36,6 +36,20 @@ The application follows a modular architecture separating the frontend UI from t
 *   **Agentic Behavior**: The AI is instructed to follow specific protocols (e.g., "The Socratic Guide") to act more like a human interviewer rather than a simple Q&A bot.
 *   **Comprehensive Feedback**: At the end of the session, the AI generates a structured JSON report evaluating Communication, Technical Knowledge, Strengths, and Areas for Improvement.
 
+## 🤖 Agentic Behavior Protocols
+
+To ensure a realistic and effective interview simulation, the AI interviewer is programmed with specific behavioral protocols:
+
+1.  **The Mirror Effect**: Adapts to the candidate's communication style. If the candidate is concise, the AI moves quickly. If detailed, the AI acknowledges points before proceeding.
+2.  **The Course Corrector**: Gently manages off-topic discussions by summarizing the candidate's point and redirecting back to the core question.
+3.  **The Socratic Guide**: Helps stuck candidates by offering rephrased questions or scenarios instead of giving the answer directly.
+4.  **The Deep Diver**: Probes surface-level answers with follow-up questions to ensure depth of understanding.
+5.  **The Professional Guardrail**: Maintains a strict professional focus, refusing to engage in non-interview topics while staying in character.
+6.  **The Thread Follower (Highest Priority)**: Dynamically pivots the conversation based on specific tools or technologies mentioned by the candidate, prioritizing these over the generic question list.
+
+### Termination Protocol
+When the interview time limit is reached, the AI immediately stops questioning and concludes the session with a standard closing statement, ensuring a hard stop similar to a real scheduled interview.
+
 ## 🚀 Setup Instructions
 
 ### Prerequisites
