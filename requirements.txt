@@ -1,0 +1,8 @@
+streamlit
+google-generativeai
+python-dotenv
+speechrecognition
+pyttsx3
+pyaudio
+pypdf
+python-docx
