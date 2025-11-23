@@ -6,6 +6,27 @@ An AI-powered mock interview application designed to help users practice technic
 
 The application follows a modular architecture separating the frontend UI from the core AI logic.
 
+```mermaid
+graph TD
+    User([User]) <-->|Voice/Text| UI[Streamlit UI (Manager.py)]
+    
+    subgraph Frontend
+        UI -->|State Management| State[(Session State)]
+        UI -->|Speech Input| STT[SpeechRecognition]
+        UI -->|Speech Output| TTS[pyttsx3]
+    end
+    
+    subgraph Backend
+        UI <-->|API Calls| Agent[InterviewManager (agent.py)]
+        Agent -->|History & Context| Context[(Context Manager)]
+        Agent <-->|Generate Content| Gemini[Google Gemini API]
+    end
+    
+    style User fill:#f9f,stroke:#333,stroke-width:2px
+    style Gemini fill:#4285F4,stroke:#333,stroke-width:2px,color:white
+    style UI fill:#FF4B4B,stroke:#333,stroke-width:2px,color:white
+```
+
 ### Components
 
 1.  **Frontend (`Manager.py`)**:
